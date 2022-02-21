@@ -130,7 +130,7 @@ class ApplicationBehavior extends Behavior {
 		
 		this.keys = {};
 		this.controlsCurrent = 320;
-		this.controlsStatus = false;
+		this.controlsStatus = true;
 		this.infoStatus = true;
 		
 		let path = system.applicationPath;
@@ -441,39 +441,18 @@ class ApplicationBehavior extends Behavior {
 		system.saveFile({ prompt:"Save Screen", name:"screen.png" }, path => { if (path) application.defer("doSaveScreenCallback", new String(path)); });
 	}
 	doSaveScreenCallback(application, path) {
-		this.SCREEN.writePNG(path);
-	}
-	doSaveSequence() {
-		system.saveDirectory({ prompt:"Save Sequence", name:"screens" }, path => { if (path) application.defer("doSaveSequenceCallback", new String(path)); });
-	}
-	doSaveSequenceCallback(application, directory) {
-		const screen = this.SCREEN;
-		const behavior = screen.behavior;
-		let i = 0;
-		screen.behavior = {
-			onMessage(screen, message) {
-				message = JSON.parse(message);
-				if (message.about == "mcsim") {
-					if (message.command == "step") {
-						let name = i + ".png";
-						if (i < 10)
-							name = "000" + name;
-						else if (i < 100)
-							name = "00" + name;
-						else if (i < 1000)
-							name = "0" + name;
-						let path = system.buildPath(directory, name);
-						screen.writePNG(path);
-						i++;
-						screen.postMessage(`{ "about":"mcsim", "frame":${i} }`);
-					}
-					else
-						screen.behavior = behavior;
-				}
-			}
+		try  {
+			this.SCREEN.writePNG(path);
 		}
-		system.ensureDirectory(directory);
-		screen.postMessage(`{ "about":"mcsim", "frame":${i} }`);
+		catch (e){
+			system.alert({ 
+				type:"stop",
+				prompt:"mcsim",
+				info:`Error saving ${path}: ${e}`,
+				buttons:["Cancel"]
+			}, ok => {
+			});
+		}
 	}
 /* VIEW MENU */
 	canToggleControls(target, item) {
@@ -540,10 +519,6 @@ class ApplicationBehavior extends Behavior {
 					this.deviceIndex = preferences.deviceIndex;
 				if ("deviceRotation" in preferences)
 					this.deviceRotation = preferences.deviceRotation;
-				if (("libraryPath" in preferences) && system.fileExists(preferences.libraryPath))
-					this.libraryPath = preferences.libraryPath;
-				if (("archivePath" in preferences) && system.fileExists(preferences.archivePath))
-					this.archivePath = preferences.archivePath;
 			}
 		}
 		catch(e) {
@@ -561,8 +536,6 @@ class ApplicationBehavior extends Behavior {
 				devicesPath: this.devicesPath,
 				deviceIndex: this.deviceIndex,
 				deviceRotation: this.deviceRotation,
-				libraryPath: this.libraryPath,
-				archivePath: this.archivePath,
 			};
 			let string = JSON.stringify(preferences, null, "\t");
 			system.writePreferenceString("main", string);
@@ -772,7 +745,6 @@ let mcsimApplication = Application.template($ => ({
 				{ title:"Reload Simulators", shift:true, key:"R", command:"ReloadSimulators" },
 				null,
 // 				{ title:"Save Screen...", key:"S", command:"SaveScreen" },
-// 				{ title:"Save Sequence...", command:"SaveSequence" },
 // 				null,
 				{ title:"Quit", key:"Q", command:"Quit" },
 			],
