@@ -29,7 +29,7 @@ EXPECTED_ESP_IDF ?= v4.4
 ESP32_SUBCLASS ?= esp32
 # $(warning ESP32_SUBCLASS $(ESP32_SUBCLASS))
 
-ifeq ($(ESP32_SUBCLASS),"esp32c3")
+ifeq ("$(ESP32_SUBCLASS)","esp32c3")
 	ESP_ARCH = riscv
 else
 	ESP_ARCH = xtensa
@@ -208,12 +208,22 @@ XS_HEADERS = \
 	$(XS_DIR)/platforms/esp/xsPlatform.h
 HEADERS += $(XS_HEADERS)
 
+ifeq ("$(ESP32_SUBCLASS)",esp32c3)
+CC = riscV32-esp-elf-gcc
+CPP = riscV32-esp-elf-g++
+LD = $(CPP)
+AR = riscv32-esp-elf-ar
+OBJCOPY = riscv32-esp-elf-objcopy
+OBJDUMP = riscv32-esp-elf-objdump
+else
 CC  = xtensa-$(ESP32_SUBCLASS)-elf-gcc
 CPP = xtensa-$(ESP32_SUBCLASS)-elf-g++
 LD  = $(CPP)
 AR  = xtensa-$(ESP32_SUBCLASS)-elf-ar
 OBJCOPY = xtensa-$(ESP32_SUBCLASS)-elf-objcopy
 OBJDUMP = xtensa-$(ESP32_SUBCLASS)-elf-objdump
+endif
+
 ESPTOOL = $(IDF_PATH)/components/esptool_py/esptool/esptool.py
 
 AR_FLAGS = crs
