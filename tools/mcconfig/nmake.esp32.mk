@@ -256,12 +256,19 @@ SDKCONFIG_H = $(SDKCONFIG_H_DIR)\sdkconfig.h
 HEADERS = $(HEADERS) $(XS_HEADERS)
 
 TOOLS_BIN = 
-
-CC = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-gcc
-CPP = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-g++
-LD = $(CPP)
-AR = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-ar
-OBJCOPY = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-objcopy
+!IF "$(ESP32_SUBCLASS)"=="esp32c3"
+	CC = $(TOOLS_BIN)riscv32-esp-elf-gcc
+	CPP = $(TOOLS_BIN)riscv32-esp-elf-g++
+	LD = $(CPP)
+	AR = $(TOOLS_BIN)riscv32-esp-elf-ar
+	OBJCOPY = $(TOOLS_BIN)riscv32-esp-elf-objcopy
+!ELSE
+	CC = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-gcc
+	CPP = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-g++
+	LD = $(CPP)
+	AR = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-ar
+	OBJCOPY = $(TOOLS_BIN)xtensa-$(ESP32_SUBCLASS)-elf-objcopy
+!ENDIF
 
 AR_OPTIONS = crs
 
