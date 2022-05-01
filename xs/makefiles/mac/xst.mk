@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016-2017  Moddable Tech, Inc.
+# Copyright (c) 2016-2022  Moddable Tech, Inc.
 #
 #   This file is part of the Moddable SDK Tools.
 # 
@@ -38,7 +38,9 @@ TMP_DIR = $(BUILD_DIR)/tmp/mac/$(GOAL)/$(NAME)
 
 # MACOS_ARCH ?= -arch i386
 MACOS_ARCH ?= 
-MACOS_VERSION_MIN ?= -mmacosx-version-min=10.7
+MACOS_VERSION_MIN ?= -mmacosx-version-min=10.10
+
+FUZZILLI ?= 0
 
 C_OPTIONS = \
 	-fno-common \
@@ -77,8 +79,12 @@ ifneq ("x$(SDKROOT)", "x")
 endif
 
 ifeq ($(GOAL),debug)
-	C_OPTIONS += -fsanitize=address -fno-omit-frame-pointer -DmxASANStackMargin=16384
+	C_OPTIONS += -DmxASANStackMargin=65536 -fsanitize=address -fno-omit-frame-pointer
 	LINK_OPTIONS += -fsanitize=address -fno-omit-frame-pointer
+
+	ifneq ($(FUZZILLI),0)
+		C_OPTIONS += -DFUZZILLI=1 -fsanitize-coverage=trace-pc-guard -DmxStress=1
+	endif
 endif
 
 OBJECTS = \
