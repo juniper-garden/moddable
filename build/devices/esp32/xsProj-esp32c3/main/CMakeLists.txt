@@ -31,7 +31,7 @@ if (DEBUGGER_SPEED)
     target_compile_options(${COMPONENT_TARGET} PRIVATE -DDEBUGGER_SPEED=${DEBUGGER_SPEED})
 endif()
 
-add_prebuilt_library(xsesp32 ${CMAKE_BINARY_DIR}/xs_${ESP32_SUBCLASS}.a
+add_prebuilt_library(riscv ${CMAKE_BINARY_DIR}/xs_${ESP32_SUBCLASS}.a
              PRIV_REQUIRES driver nvs_flash vfs spiffs fatfs bt)
 
 target_link_libraries(${COMPONENT_LIB} PRIVATE xsesp32)

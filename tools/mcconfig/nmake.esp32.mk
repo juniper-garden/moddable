@@ -128,8 +128,8 @@ INC_DIRS = \
  	-I$(IDF_PATH)\components\esp_system\include \
  	-I$(IDF_PATH)\components\esp_timer\include \
  	-I$(IDF_PATH)\components\esp_wifi\include \
- 	-I$(IDF_PATH)\components\xtensa\include \
-	-I$(IDF_PATH)\components\xtensa\$(ESP32_SUBCLASS)\include \
+ 	-I$(IDF_PATH)\components\$(ESP_ARCH)\include \
+	-I$(IDF_PATH)\components\$(ESP_ARCH)\$(ESP32_SUBCLASS)\include \
  	-I$(IDF_PATH)\components\freertos \
  	-I$(IDF_PATH)\components\freertos\include \
  	-I$(IDF_PATH)\components\freertos\include\freertos \
@@ -160,6 +160,7 @@ INC_DIRS = \
 	-I$(IDF_PATH)\components\bt\host\nimble\nimble\porting\npl\freertos\include \
 	-I$(IDF_PATH)\components\bt\host\nimble\port\include \
 	-I$(IDF_PATH)\components\soc\$(ESP32_SUBCLASS)\include \
+	-I$(IDF_PATH)\components\soc\$(ESP32_SUBCLASS)\include\soc \
 	-I$(IDF_PATH)\components\soc\include \
 	-I$(IDF_PATH)\components\soc\include\soc \
 	-I$(IDF_PATH)\components\spiffs\include \

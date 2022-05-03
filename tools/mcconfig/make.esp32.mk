@@ -101,6 +101,8 @@ INC_DIRS = \
  	$(IDF_PATH)/components/esp_system/include \
  	$(IDF_PATH)/components/esp_timer/include \
  	$(IDF_PATH)/components/esp_wifi/include \
+ 	$(IDF_PATH)/components/$(ESP_ARCH)/include \
+	$(IDF_PATH)/components/$(ESP_ARCH)/$(ESP32_SUBCLASS)/include \
  	$(IDF_PATH)/components/freertos \
  	$(IDF_PATH)/components/freertos/include \
  	$(IDF_PATH)/components/freertos/include/freertos \
@@ -131,7 +133,9 @@ INC_DIRS = \
  	$(IDF_PATH)/components/bt/host/nimble/nimble/porting/nimble/include \
  	$(IDF_PATH)/components/bt/host/nimble/nimble/porting/npl/freertos/include \
  	$(IDF_PATH)/components/bt/host/nimble/port/include \
+        $(IDF_PATH)/components/soc/$(ESP32_SUBCLASS) \
  	$(IDF_PATH)/components/soc/$(ESP32_SUBCLASS)/include \
+	$(IDF_PATH)/components/soc/$(ESP32_SUBCLASS)/include/soc \
  	$(IDF_PATH)/components/soc/include \
  	$(IDF_PATH)/components/soc/include/soc \
  	$(IDF_PATH)/components/spiffs/include \
@@ -157,6 +161,7 @@ endif
 
 
 # 	$(IDF_PATH)/components/$(ESP32_SUBCLASS)/include \
+ 	$(IDF_PATH)/components/vfs/include 
     
 XS_OBJ = \
 	$(LIB_DIR)/xsAll.c.o \
@@ -218,9 +223,9 @@ XS_HEADERS = \
 	$(XS_DIR)/platforms/esp/xsPlatform.h
 HEADERS += $(XS_HEADERS)
 
-ifeq ("$(ESP32_SUBCLASS)",esp32c3)
-CC = riscV32-esp-elf-gcc
-CPP = riscV32-esp-elf-g++
+ifeq ("$(ESP32_SUBCLASS)","esp32c3")
+CC = riscv32-esp-elf-gcc
+CPP = riscv32-esp-elf-g++
 LD = $(CPP)
 AR = riscv32-esp-elf-ar
 OBJCOPY = riscv32-esp-elf-objcopy
@@ -282,8 +287,8 @@ C_COMMON_FLAGS ?= -c -Os -g \
 	-Wl,-EL \
 	-fno-inline-functions \
 	-nostdlib \
-	-mlongcalls \
-	-mtext-section-literals \
+#	-mlongcalls \
+#	-mtext-section-literals \
 	-falign-functions=4 \
 	-MMD \
 	-fdata-sections \
