@@ -299,6 +299,9 @@ struct sxBlock {
 
 struct sxChunk {
 	txSize size;
+#if INTPTR_MAX == INT64_MAX
+	txS4 dummy;
+#endif
 	txByte* temporary;
 };
 
@@ -1789,6 +1792,14 @@ mxExport void fx_Compartment_prototype_module(txMachine* the);
 mxExport void fx_StaticModuleRecord(txMachine* the);
 mxExport void fx_StaticModuleRecord_initialize(txMachine* the);
 mxExport void fx_StaticModuleRecord_prototype_get_bindings(txMachine* the);
+
+/* xsLockdown.c */
+#ifdef mxLockdown
+mxExport void fx_harden(txMachine* the);
+mxExport void fx_lockdown(txMachine* the);
+mxExport void fx_petrify(txMachine* the);
+mxExport void fx_mutabilities(txMachine* the);
+#endif
 
 /* xsProfile.c */
 #ifdef mxProfile
