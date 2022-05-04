@@ -147,18 +147,6 @@ INC_DIRS = \
  	$(IDF_PATH)/components/tcpip_adapter/include \
  	$(IDF_PATH)/components/tcpip_adapter \
  	$(IDF_PATH)/components/vfs/include
-	
-ifeq ("$(ESP32_SUBCLASS)","esp32c3")
-	INC_DIRS += \
- 		$(IDF_PATH)/components/riscv/include \
-		$(IDF_PATH)/components/riscv/$(ESP32_SUBCLASS)/include \
-else
-	INC_DIRS += \
- 		$(IDF_PATH)/components/xtensa/include \
-		$(IDF_PATH)/components/xtensa/$(ESP32_SUBCLASS)/include \
-endif
-
-
 
 # 	$(IDF_PATH)/components/$(ESP32_SUBCLASS)/include \
  	$(IDF_PATH)/components/vfs/include 
