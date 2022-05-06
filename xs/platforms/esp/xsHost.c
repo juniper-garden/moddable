@@ -2,22 +2,22 @@
  * Copyright (c) 2016-2022  Moddable Tech, Inc.
  *
  *   This file is part of the Moddable SDK Runtime.
- * 
+ *
  *   The Moddable SDK Runtime is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Lesser General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
- * 
+ *
  *   The Moddable SDK Runtime is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU Lesser General Public License for more details.
- * 
+ *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Moddable SDK Runtime.  If not, see <http://www.gnu.org/licenses/>.
  *
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
  *
  *       Copyright (C) 2010-2016 Marvell International Ltd.
  *       Copyright (C) 2002-2010 Kinoma, Inc.
@@ -808,7 +808,7 @@ void espInitInstrumentation(txMachine *the)
 #if kTargetCPUCount > 1
 	modInstrumentationSetCallback(CPU1, modInstrumentationCPU1);
 #endif
-	
+
 	timer_config_t config = {
 		.divider = 16,
 		.counter_dir = TIMER_COUNT_UP,
@@ -870,6 +870,10 @@ void espSampleInstrumentation(modTimer timer, void *refcon, int refconSize)
 #if INSTRUMENT_CPULOAD
 void IRAM_ATTR timer_group0_isr(void *para)
 {
+#if kCPUESP32C3
+  TIMERG0.int_st_timers.t0_int_st = 1;
+  TIMERG0.hw_timer[TIMER_0].config.tx_alarm_en = TIMER_ALARM_EN;
+#else
 #if kCPUESP32S3
 	TIMERG0.int_st_timers.t0_int_st = 1;
 	TIMERG0.hw_timer[TIMER_0].config.tn_alarm_en = TIMER_ALARM_EN;
@@ -877,7 +881,7 @@ void IRAM_ATTR timer_group0_isr(void *para)
 	TIMERG0.kESP32TimerDef.t0 = 1;
 	TIMERG0.hw_timer[TIMER_0].config.alarm_en = TIMER_ALARM_EN;
 #endif
-
+#endif
 	gCPUCounts[0 + (xTaskGetCurrentTaskHandleForCPU(0) == gIdles[0])] += 1;
 #if kTargetCPUCount > 1
 	gCPUCounts[2 + (xTaskGetCurrentTaskHandleForCPU(1) == gIdles[1])] += 1;
@@ -1355,7 +1359,7 @@ static txBoolean spiWrite(void *dst, size_t offset, void *buffer, size_t size)
 
 void *modInstallMods(void *preparationIn, uint8_t *status)
 {
-	txPreparation *preparation = preparationIn; 
+	txPreparation *preparation = preparationIn;
 	spi_flash_mmap_handle_t handle;
 	void *result = NULL;
 
@@ -1401,7 +1405,7 @@ static txBoolean spiWrite(void *dst, size_t offset, void *buffer, size_t size)
 
 void *modInstallMods(void *preparationIn, uint8_t *status)
 {
-	txPreparation *preparation = preparationIn; 
+	txPreparation *preparation = preparationIn;
 
 	if (fxMapArchive(preparation, (void *)kModulesStart, kModulesStart, kFlashSectorSize, spiRead, spiWrite))
 		return kModulesStart;
