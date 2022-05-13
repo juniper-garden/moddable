@@ -20,7 +20,7 @@
 
 
 #define __XS6PLATFORMMINIMAL__
-#define ESP32 1
+#define ESP32 4
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,17 +79,9 @@ static xsMachine *gThe;		// the main XS virtual machine running
 	unsigned char gXSBUG[4] = {DEBUG_IP};
 #endif
 
-#if 0
-	#define USE_UART	UART_NUM_2
-	#define USE_UART_TX	17
-	#define USE_UART_RX	16
-#else
-	#define USE_UART	UART_NUM_0
-	#define USE_UART_TX	43
-	#define USE_UART_RX	44
-//		#define USE_UART_TX	1
-//		#define USE_UART_RX	3
-#endif
+#define USE_UART	UART_NUM_0
+#define USE_UART_TX	21
+#define USE_UART_RX	20
 
 #ifdef mxDebug
 
@@ -111,6 +103,7 @@ static void debug_task(void *pvParameter)
 
 void setup(void)
 {
+	esp_task_wdt_add(NULL);
 	esp_err_t err;
 	uart_config_t uartConfig;
 #ifdef mxDebug
@@ -135,7 +128,7 @@ void setup(void)
 #ifdef mxDebug
 	QueueHandle_t uartQueue;
 	uart_driver_install(USE_UART, UART_FIFO_LEN * 2, 0, 8, &uartQueue, 0);
-	xTaskCreate(debug_task, "debug", (768 + XT_STACK_EXTRA) / sizeof(StackType_t), uartQueue, 8, NULL);
+	xTaskCreate(debug_task, "debug", 768 / sizeof(StackType_t), uartQueue, 8, NULL);
 #else
 	uart_driver_install(USE_UART, UART_FIFO_LEN * 2, 0, 0, NULL, 0);
 #endif
@@ -145,7 +138,7 @@ void setup(void)
 	modRunMachineSetup(gThe);
 
 #if CONFIG_TASK_WDT
-	esp_task_wdt_add(NULL);
+//	esp_task_wdt_add(NULL);
 #endif
 }
 
@@ -223,9 +216,9 @@ void app_main() {
 #endif
 
 	#if 0 == CONFIG_LOG_DEFAULT_LEVEL
-		#define kStack (((8 * 1024) + XT_STACK_EXTRA_CLIB) / sizeof(StackType_t))
+		#define kStack ((8 * 1024) / sizeof(StackType_t))
 	#else
-		#define kStack (((10 * 1024) + XT_STACK_EXTRA_CLIB) / sizeof(StackType_t))
+		#define kStack ((10 * 1024) / sizeof(StackType_t))
 	#endif
 
     xTaskCreate(loop_task, "main", kStack, NULL, 4, NULL);

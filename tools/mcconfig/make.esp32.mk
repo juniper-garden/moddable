@@ -31,8 +31,10 @@ ESP32_SUBCLASS ?= esp32
 
 ifeq ("$(ESP32_SUBCLASS)","esp32c3")
 	ESP_ARCH = riscv
+	GXX_PREFIX = riscv32-esp
 else
 	ESP_ARCH = xtensa
+	GXX_PREFIX = xtensa-$(ESP32_SUBCLASS)
 endif
 
 ifeq ($(VERBOSE),1)
@@ -214,21 +216,12 @@ XS_HEADERS = \
 	$(XS_DIR)/platforms/esp/xsPlatform.h
 HEADERS += $(XS_HEADERS)
 
-ifeq ("$(ESP32_SUBCLASS)","esp32c3")
-CC = riscv32-esp-elf-gcc
-CPP = riscv32-esp-elf-g++
+CC = $(GXX_PREFIX)-elf-gcc
+CPP = $(GXX_PREFIX)-elf-g++
 LD = $(CPP)
-AR = riscv32-esp-elf-ar
-OBJCOPY = riscv32-esp-elf-objcopy
-OBJDUMP = riscv32-esp-elf-objdump
-else
-CC  = xtensa-$(ESP32_SUBCLASS)-elf-gcc
-CPP = xtensa-$(ESP32_SUBCLASS)-elf-g++
-LD  = $(CPP)
-AR  = xtensa-$(ESP32_SUBCLASS)-elf-ar
-OBJCOPY = xtensa-$(ESP32_SUBCLASS)-elf-objcopy
-OBJDUMP = xtensa-$(ESP32_SUBCLASS)-elf-objdump
-endif
+AR = $(GXX_PREFIX)-elf-ar
+OBJCOPY = $(GXX_PREFIX)-elf-objcopy
+OBJDUMP = $(GXX_PREFIX)-elf-objdump
 
 ESPTOOL = $(IDF_PATH)/components/esptool_py/esptool/esptool.py
 
@@ -355,7 +348,7 @@ ifeq ($(DEBUG),1)
 	ifeq ($(HOST_OS),Darwin)
 		KILL_SERIAL_2_XSBUG = $(shell pkill serial2xsbug)
 		DO_XSBUG = open -a $(BUILD_DIR)/bin/mac/release/xsbug.app -g
-		DO_LAUNCH = bash -c "serial2xsbug $(SERIAL2XSBUG_PORT) $(DEBUGGER_SPEED) 8N1 -elf $(PROJ_DIR)/build/xs_esp32.elf -bin xtensa-$(ESP32_SUBCLASS)-elf-gdb"
+		DO_LAUNCH = bash -c "serial2xsbug $(SERIAL2XSBUG_PORT) $(DEBUGGER_SPEED) 8N1 -elf $(PROJ_DIR)/build/xs_esp32.elf -bin $(GXX_PREFIX)-elf-gdb"
 	else
 		KILL_SERIAL_2_XSBUG = $(shell pkill serial2xsbug)
 		DO_XSBUG = $(shell nohup $(BUILD_DIR)/bin/lin/release/xsbug > /dev/null 2>&1 &)

@@ -181,8 +181,8 @@ extern int modTimersNext(void);
 #else
 	#define modCriticalSectionDeclare
 	extern portMUX_TYPE gCriticalMux;
-	#define modCriticalSectionBegin() vPortEnterCritical(&gCriticalMux)
-	#define modCriticalSectionEnd() vPortExitCritical(&gCriticalMux)
+	#define modCriticalSectionBegin() portENTER_CRITICAL(&gCriticalMux)
+	#define modCriticalSectionEnd() portEXIT_CRITICAL(&gCriticalMux)
 #endif
 
 /*
