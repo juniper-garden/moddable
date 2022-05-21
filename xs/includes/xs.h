@@ -2,22 +2,22 @@
  * Copyright (c) 2016-2017  Moddable Tech, Inc.
  *
  *   This file is part of the Moddable SDK Runtime.
- * 
+ *
  *   The Moddable SDK Runtime is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Lesser General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
- * 
+ *
  *   The Moddable SDK Runtime is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU Lesser General Public License for more details.
- * 
+ *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Moddable SDK Runtime.  If not, see <http://www.gnu.org/licenses/>.
  *
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
  *
  *       Copyright (C) 2010-2016 Marvell International Ltd.
  *       Copyright (C) 2002-2010 Kinoma, Inc.
@@ -71,10 +71,10 @@
 				#define mxExport extern
 				#define mxImport extern
 			#endif
-		#else 
+		#else
 			#error unknown Microsoft compiler
 		#endif
-	#elif defined(__GNUC__) 
+	#elif defined(__GNUC__)
 
 		#define _setjmp(buffer) setjmp(buffer)
 
@@ -84,7 +84,7 @@
 			#if defined(__linux__)
 				#undef mxLinux
 				#define mxLinux 1
-				#define mxExport extern    
+				#define mxExport extern
 				#define mxImport extern
 			#else
 				#if defined(__APPLE__)
@@ -109,10 +109,10 @@
 			#define mxImport extern
 		#endif
 
-		#if defined(__ets__)
-			typedef uint32_t size_t; 
-		#endif
-	#else 
+//		#if defined(__ets__)
+//			typedef uint32_t size_t;
+//		#endif
+	#else
 		#error unknown compiler
 	#endif
 
@@ -146,7 +146,7 @@
 	#ifndef XS_FUNCTION_ANALYZER_NORETURN
 		#define XS_FUNCTION_ANALYZER_NORETURN
 	#endif
-	
+
 	#endif /* !__XSPLATFORM__ */
 #endif /* !INCLUDE_XSPLATFORM */
 
@@ -238,7 +238,7 @@ typedef txU4 xsUnsignedValue;
 #define xsTrue \
 	(fxBoolean(the, &the->scratch, 1), \
 	the->scratch)
-	
+
 #define xsBoolean(_VALUE) \
 	(fxBoolean(the, &the->scratch, _VALUE), \
 	the->scratch)
@@ -391,7 +391,7 @@ typedef txU4 xsIndex;
 	fxPush(_THIS), \
 	fxEnumerate(the), \
 	fxPop())
-	
+
 #define xsHas(_THIS,_ID) \
 	(xsOverflow(-1), \
 	fxPush(_THIS), \
@@ -402,7 +402,7 @@ typedef txU4 xsIndex;
 	fxPush(_THIS), \
 	fxPush(_AT), \
 	fxHasAt(the))
-	
+
 #define xsHasIndex(_THIS,_INDEX) \
 	(xsOverflow(-1), \
 	fxPush(_THIS), \
@@ -477,7 +477,7 @@ typedef txU4 xsIndex;
 	fxDeleteAt(the), \
 	the->stack++)
 
-#define XS_FRAME_COUNT 6 
+#define XS_FRAME_COUNT 6
 
 #define xsCall0(_THIS,_ID) \
 	(xsOverflow(-XS_FRAME_COUNT-0), \
@@ -883,12 +883,12 @@ typedef txU4 xsIndex;
 	fxPush(_SLOT7), \
 	fxRunCount(the, 8), \
 	fxPop())
-	
+
 #define xsTest(_SLOT) \
 	(xsOverflow(-1), \
 	fxPush(_SLOT), \
 	fxRunTest(the))
-	
+
 /* Globals */
 
 #define xsGlobal (the->stackTop[-1])
@@ -902,23 +902,23 @@ struct xsHostBuilderRecord {
 	xsIntegerValue length;
 	xsIdentifier id;
 };
-	
+
 #define xsNewHostConstructor(_CALLBACK,_LENGTH,_PROTOTYPE) \
 	(xsOverflow(-1), \
 	fxPush(_PROTOTYPE), \
 	fxNewHostConstructor(the, _CALLBACK, _LENGTH, xsNoID), \
 	fxPop())
-	
+
 #define xsNewHostConstructorObject(_CALLBACK,_LENGTH,_PROTOTYPE, _NAME) \
 	(xsOverflow(-1), \
 	fxPush(_PROTOTYPE), \
 	fxNewHostConstructor(the, _CALLBACK, _LENGTH, _NAME), \
 	fxPop())
-	
+
 #define xsNewHostFunction(_CALLBACK,_LENGTH) \
 	(fxNewHostFunction(the, _CALLBACK, _LENGTH, xsNoID), \
 	fxPop())
-	
+
 #define xsNewHostFunctionObject(_CALLBACK,_LENGTH, _NAME) \
 	(fxNewHostFunction(the, _CALLBACK, _LENGTH, _NAME), \
 	fxPop())
@@ -934,7 +934,7 @@ typedef void (*xsDestructor)(void*);
 #define xsNewHostObject(_DESTRUCTOR) \
 	(fxNewHostObject(the, _DESTRUCTOR), \
 	fxPop())
-	
+
 #define xsGetHostBufferLength(_SLOT) \
 	(the->scratch = (_SLOT), \
 	fxGetHostBufferLength(the, &(the->scratch)))
@@ -958,7 +958,7 @@ typedef void (*xsDestructor)(void*);
 #define xsSetHostData(_SLOT,_DATA) \
 	(the->scratch = (_SLOT), \
 	fxSetHostData(the, &(the->scratch), _DATA))
-	
+
 #define xsGetHostDataValidate(_SLOT, validator) \
 	(the->scratch = (_SLOT), \
 	fxGetHostDataValidate(the, &(the->scratch), validator))
@@ -973,7 +973,7 @@ typedef void (*xsDestructor)(void*);
 #define xsGetHostHandle(_SLOT) \
 	(the->scratch = (_SLOT), \
 	fxGetHostHandle(the, &(the->scratch)))
-	
+
 typedef void (*xsMarkRoot)(xsMachine*, xsSlot*);
 typedef void (*xsMarker)(xsMachine*, void*, xsMarkRoot);
 typedef void (*xsSweepRoot)(xsMachine*, xsSlot*);
@@ -983,7 +983,7 @@ struct xsHostHooksStruct {
 	xsMarker marker;
 	xsSweeper sweeper;
 };
-	
+
 #define xsGetHostHooks(_SLOT) \
 	(the->scratch = (_SLOT), \
 	fxGetHostHooks(the, &(the->scratch)))
@@ -1015,7 +1015,7 @@ struct xsHostHooksStruct {
 #else
 #define xsVar(_INDEX) (the->scope[-1 - (_INDEX)])
 #endif
-	
+
 /* Garbage Collector */
 
 #define xsCollectGarbage() \
@@ -1127,7 +1127,7 @@ struct xsJumpRecord {
 #endif
 
 /* Debugger */
-	
+
 #ifdef mxDebug
 	#define xsDebugger() \
 		fxDebugger(the,(char *)__FILE__,__LINE__)
@@ -1150,7 +1150,7 @@ struct xsJumpRecord {
 	fxBubble(the, 5, _BUFFER, _LENGTH, _ID)
 #define xsTraceRightBytes(_BUFFER,_LENGTH,_ID) \
 	fxBubble(the, 6, _BUFFER, _LENGTH, _ID)
-	
+
 #define xsLog(...) \
 	fxReport(the, __VA_ARGS__)
 
@@ -1198,21 +1198,21 @@ struct xsCreationRecord {
 
 #define xsCreateMachine(_CREATION,_NAME,_CONTEXT) \
 	fxCreateMachine(_CREATION, _NAME, _CONTEXT)
-	
+
 #define xsDeleteMachine(_THE) \
 	fxDeleteMachine(_THE)
-	
+
 #define xsCloneMachine(_CREATION,_MACHINE,_NAME,_CONTEXT) \
 	fxCloneMachine(_CREATION, _MACHINE, _NAME, _CONTEXT)
-	
+
 #define xsPrepareMachine(_CREATION,_PREPARATION,_NAME, _CONTEXT, _ARCHIVE) \
 	fxPrepareMachine(_CREATION, _PREPARATION, _NAME, _CONTEXT, _ARCHIVE)
 
 #define xsShareMachine(_THE) \
 	fxShareMachine(_THE)
 
-/* Context */	
-	
+/* Context */
+
 #define xsGetContext(_THE) \
 	((_THE)->context)
 
@@ -1250,7 +1250,7 @@ struct xsCreationRecord {
 		break; \
 	} while(1)
 
-enum {	
+enum {
 	xsNoID = -1,
 	xsDefault = 0,
 	xsDontDelete = 2,
@@ -1262,7 +1262,7 @@ enum {
 	xsChangeAll = 30
 };
 typedef unsigned char xsAttribute;
-	
+
 #define xsArrayCacheBegin(_ARRAY) \
 	(fxPush(_ARRAY), \
 	fxArrayCacheBegin(the, the->stack), \
@@ -1470,7 +1470,7 @@ mxImport void* fxMarshall(xsMachine*, xsBooleanValue);
 mxImport xsBooleanValue fxIsProfiling(xsMachine*);
 mxImport void fxStartProfiling(xsMachine*);
 mxImport void fxStopProfiling(xsMachine*);
-	
+
 mxImport void* fxGetArchiveCode(xsMachine*, void*, xsStringValue, size_t*);
 mxImport xsIntegerValue fxGetArchiveCodeCount(xsMachine*, void*);
 mxImport void* fxGetArchiveCodeName(xsMachine*, void*, xsIntegerValue);
@@ -1493,4 +1493,3 @@ mxImport void fxAbort(xsMachine* the, int status);
 #endif /* !__XSALL__ */
 
 #endif /* __XS__ */
-
