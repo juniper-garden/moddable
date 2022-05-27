@@ -51,7 +51,6 @@ static void fxUnprojectTable(txMachine* the, txSnapshot* snapshot, txSlot* table
 
 static void fxWriteChunk(txMachine* the, txSnapshot* snapshot, txSlot* slot);
 static void fxWriteChunkArray(txMachine* the, txSnapshot* snapshot, txSlot* address, txSize length, txFlag flag);
-static void fxWriteChunkBigInt(txMachine* the, txSnapshot* snapshot, void* address, txSize size);
 static void fxWriteChunkData(txMachine* the, txSnapshot* snapshot, void* address);
 static void fxWriteChunkTable(txMachine* the, txSnapshot* snapshot, txSlot** address, txSize length);
 static void fxWriteChunkZero(txMachine* the, txSnapshot* snapshot, txSize size);
@@ -1200,7 +1199,7 @@ void fxWriteChunk(txMachine* the, txSnapshot* snapshot, txSlot* slot)
 		fxWriteChunkData(the, snapshot, slot->value.string);
 		break;
 	case XS_BIGINT_KIND:
-		fxWriteChunkBigInt(the, snapshot, slot->value.bigint.data, slot->value.bigint.size);
+		fxWriteChunkData(the, snapshot, slot->value.bigint.data);
 		break;
 	case XS_ARGUMENTS_SLOPPY_KIND:
 	case XS_ARGUMENTS_STRICT_KIND:
@@ -1267,20 +1266,6 @@ void fxWriteChunkArray(txMachine* the, txSnapshot* snapshot, txSlot* address, tx
 			address++;
 			size -= sizeof(txSlot);
 		}
-	}
-}
-
-void fxWriteChunkBigInt(txMachine* the, txSnapshot* snapshot, void* address, txSize size)
-{
-	txChunk* chunk = (txChunk*)(((txByte*)(address)) - sizeof(txChunk));
-	if (chunk->size & mxChunkFlag) {
-		txByte* temporary = chunk->temporary;
-		size <<= 2;
-		chunk->size &= ~mxChunkFlag;
-		chunk->temporary = C_NULL;
-		mxThrowIf((*snapshot->write)(snapshot->stream, chunk, sizeof(txChunk) + size));
-		chunk->temporary = temporary;
-		fxWriteChunkZero(the, snapshot, chunk->size - sizeof(txChunk) - size);
 	}
 }
 
