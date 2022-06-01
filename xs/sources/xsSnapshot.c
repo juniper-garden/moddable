@@ -51,6 +51,7 @@ static void fxUnprojectTable(txMachine* the, txSnapshot* snapshot, txSlot* table
 
 static void fxWriteChunk(txMachine* the, txSnapshot* snapshot, txSlot* slot);
 static void fxWriteChunkArray(txMachine* the, txSnapshot* snapshot, txSlot* address, txSize length, txFlag flag);
+static void fxWriteChunkBigInt(txMachine* the, txSnapshot* snapshot, void* address, txSize size);
 static void fxWriteChunkData(txMachine* the, txSnapshot* snapshot, void* address);
 static void fxWriteChunkTable(txMachine* the, txSnapshot* snapshot, txSlot** address, txSize length);
 static void fxWriteChunkZero(txMachine* the, txSnapshot* snapshot, txSize size);
