@@ -2,22 +2,22 @@
  * Copyright (c) 2016-2017  Moddable Tech, Inc.
  *
  *   This file is part of the Moddable SDK Runtime.
- * 
+ *
  *   The Moddable SDK Runtime is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Lesser General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
- * 
+ *
  *   The Moddable SDK Runtime is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU Lesser General Public License for more details.
- * 
+ *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Moddable SDK Runtime.  If not, see <http://www.gnu.org/licenses/>.
  *
- * This file incorporates work covered by the following copyright and  
- * permission notice:  
+ * This file incorporates work covered by the following copyright and
+ * permission notice:
  *
  *       Copyright (C) 2010-2016 Marvell International Ltd.
  *       Copyright (C) 2002-2010 Kinoma, Inc.
@@ -95,7 +95,7 @@ static void fxReportException(txMachine* the, txString thePath, txInteger theLin
 	((('0' <= c) && (c <= '9')) || (('A' <= c) && (c <= 'Z')) || (('a' <= c) && (c <= 'z')) || (c == '.') || (c == '-') || (c == '_') || (c == ':'))
 #define mxIsSpace(c) \
 	((c == ' ') || (c == '\n') || (c == '\r') || (c == '\t'))
-	
+
 enum {
 	XS_BODY_STATE = 0,
 	XS_CR_STATE,
@@ -182,11 +182,11 @@ void fxClearBreakpoint(txMachine* the, txString thePath, txInteger theLine)
 	if (!c_strcmp(thePath, "exceptions")) {
 		the->breakOnExceptionsFlag = 0;
 		return;
-	}	
+	}
 	if (!c_strcmp(thePath, "start")) {
 		the->breakOnStartFlag = 0;
 		return;
-	}	
+	}
 	if ((theLine <= 0) || (0x00007FFF < theLine))
 		return;
 	path = fxFindName(the, thePath);
@@ -327,26 +327,26 @@ void fxDebugParse(txMachine* the)
 		c = *string++;
 		switch (the->debugState) {
 		case XS_BODY_STATE:
-			if (c == '<') 
+			if (c == '<')
 				the->debugState = XS_TAG_STATE;
-			else if (c == '\r') 
+			else if (c == '\r')
 				the->debugState = XS_CR_STATE;
 			break;
-			
+
 		case XS_CR_STATE:
-			if (c == '\n') 
+			if (c == '\n')
 				the->debugState = XS_LF_STATE;
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
-			
+
 		case XS_LF_STATE:
-			if (c == '<') 
+			if (c == '<')
 				the->debugState = XS_TAG_STATE;
-			else if (c == '\r') 
+			else if (c == '\r')
 				the->debugState = XS_CR_STATE;
 			break;
-			
+
 		case XS_TAG_STATE:
 			if (c == '/')
 				the->debugState = XS_END_TAG_STATE;
@@ -391,7 +391,7 @@ void fxDebugParse(txMachine* the)
 			else if (!mxIsSpace(c))
 				the->debugState = XS_ERROR_STATE;
 			break;
-			
+
 		case XS_ATTRIBUTE_NAME_STATE:
 			if (mxIsNextLetter(c)) {
 				if (the->nameIndex < 255) {
@@ -464,7 +464,7 @@ void fxDebugParse(txMachine* the)
 					the->debugState = XS_START_TAG_SPACE_STATE;
 			}
 			break;
-			
+
 		case XS_EMPTY_TAG_STATE:
 			if (c == '>') {
 				the->debugState = XS_BODY_STATE;
@@ -474,7 +474,7 @@ void fxDebugParse(txMachine* the)
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
-			
+
 		case XS_END_TAG_STATE:
 			if (mxIsFirstLetter(c))	{
 				the->debugState = XS_END_TAG_NAME_STATE;
@@ -490,7 +490,7 @@ void fxDebugParse(txMachine* the)
 					the->nameBuffer[the->nameIndex] = c;
 					the->nameIndex++;
 				}
-				else 
+				else
 					the->debugState = XS_ERROR_STATE;
 				break;
 			}
@@ -517,39 +517,39 @@ void fxDebugParse(txMachine* the)
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
-			
+
 		case XS_START_CDATA_STATE_1:
-			if (c == '[') 
+			if (c == '[')
 				the->debugState = XS_START_CDATA_STATE_2;
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
 		case XS_START_CDATA_STATE_2:
-			if (c == 'C') 
+			if (c == 'C')
 				the->debugState = XS_START_CDATA_STATE_3;
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
 		case XS_START_CDATA_STATE_3:
-			if (c == 'D') 
+			if (c == 'D')
 				the->debugState = XS_START_CDATA_STATE_4;
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
 		case XS_START_CDATA_STATE_4:
-			if (c == 'A') 
+			if (c == 'A')
 				the->debugState = XS_START_CDATA_STATE_5;
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
 		case XS_START_CDATA_STATE_5:
-			if (c == 'T') 
+			if (c == 'T')
 				the->debugState = XS_START_CDATA_STATE_6;
 			else
 				the->debugState = XS_ERROR_STATE;
 			break;
 		case XS_START_CDATA_STATE_6:
-			if (c == 'A') 
+			if (c == 'A')
 				the->debugState = XS_START_CDATA_STATE_7;
 			else
 				the->debugState = XS_ERROR_STATE;
@@ -561,7 +561,7 @@ void fxDebugParse(txMachine* the)
 				the->debugState = XS_ERROR_STATE;
 			break;
 		case XS_CDATA_STATE:
-			if (c == ']') 
+			if (c == ']')
 				the->debugState = XS_END_CDATA_STATE_1;
 			else if (c == 0) {
 				fxDebugScriptCDATA(the, 0xF4);
@@ -573,7 +573,7 @@ void fxDebugParse(txMachine* the)
 				fxDebugScriptCDATA(the, c);
 			break;
 		case XS_END_CDATA_STATE_1:
-			if (c == ']') 
+			if (c == ']')
 				the->debugState = XS_END_CDATA_STATE_2;
 			else {
 				fxDebugScriptCDATA(the, ']');
@@ -593,7 +593,7 @@ void fxDebugParse(txMachine* the)
 				the->debugState = XS_CDATA_STATE;
 			}
 			break;
-			
+
 		case XS_ERROR_STATE:
 // 			fprintf(stderr, "\nERROR: %c\n", c);
 			break;
@@ -1296,7 +1296,7 @@ void fxEchoProperty(txMachine* the, txSlot* theProperty, txInspectorNameList* th
 			fxEchoString(the, the->nameBuffer);
 		}
 		fxEcho(the, "\"");
-	
+
 		switch (theProperty->kind) {
 		case XS_UNDEFINED_KIND:
 			fxEcho(the, " value=\"undefined\"/>");
@@ -1441,13 +1441,13 @@ void fxEchoPropertyHost(txMachine* the, txInspectorNameList* theList, txSlot* th
 			hostInspector->kind = XS_HOST_INSPECTOR_KIND;
 			hostInspector->value.hostInspector.cache = cache;
 			hostInspector->value.hostInspector.instance = theInstance;
-			if (hostInspectors->value.list.first) 
+			if (hostInspectors->value.list.first)
 				hostInspectors->value.list.last->next = hostInspector;
 			else
 				hostInspectors->value.list.first = hostInspector;
 			hostInspectors->value.list.last = hostInspector;
 			mxPop();
-			
+
 			aParent = theInstance;
 			while (aParent && (aParent->next->kind == XS_HOST_KIND)) {
 				txSlot* aParentProperty = aParent->next;
@@ -1526,7 +1526,7 @@ void fxEchoPropertyInstance(txMachine* the, txInspectorNameList* theList, txStri
 	fxEcho(the, " name=\"");
 	fxEchoString(the, buffer);
 	fxEcho(the, "\"");
-	
+
 	if (instanceInspector) {
 		if (instanceInspector->value.instanceInspector.link) {
 			txInspectorNameLink* link = theList->first;
@@ -1551,12 +1551,12 @@ void fxEchoPropertyInstance(txMachine* the, txInspectorNameList* theList, txStri
 				theList->first = &link;
 			theList->last = &link;
 			instanceInspector->value.instanceInspector.link = &link;
-			
+
 			fxEchoAddress(the, theInstance);
 			fxEcho(the, ">");
 			fxEchoInstance(the, theInstance, theList);
 			fxEcho(the, "</property>");
-			
+
 			instanceInspector->value.instanceInspector.link = C_NULL;
 			if (link.previous)
 				link.previous->next = C_NULL;
@@ -1899,11 +1899,11 @@ void fxSetBreakpoint(txMachine* the, txString thePath, txInteger theLine)
 	if (!c_strcmp(thePath, "exceptions")) {
 		the->breakOnExceptionsFlag = 1;
 		return;
-	}	
+	}
 	if (!c_strcmp(thePath, "start")) {
 		the->breakOnStartFlag = 1;
 		return;
-	}	
+	}
 	if ((theLine <= 0) || (0x00007FFF < theLine))
 		return;
 	path = fxNewNameC(the, thePath);
@@ -2027,7 +2027,7 @@ void fxBubble(txMachine* the, txInteger flags, void* message, txInteger length, 
 			while (byteLength) {
 				txU1 byte = c_read8(bytes);
 				fxEchoCharacter(the, gxHexaDigits[(byte & 0xF0) >> 4]);
-				fxEchoCharacter(the, gxHexaDigits[(byte & 0x0F)]);	
+				fxEchoCharacter(the, gxHexaDigits[(byte & 0x0F)]);
 				bytes++;
 				byteLength--;
 			}
@@ -2248,7 +2248,7 @@ void fxVReportWarning(void* console, txString thePath, txInteger theLine, txStri
 #endif
 }
 
-#ifdef mxInstrument	
+#ifdef mxInstrument
 #define xsInstrumentCount 11
 static char* const xsInstrumentNames[xsInstrumentCount] ICACHE_XS6STRING_ATTR = {
 	"Chunk used",
@@ -2293,9 +2293,9 @@ void fxDescribeInstrumentation(txMachine* the, txInteger count, txString* names,
 		}
 		for (i = 0; i < xsInstrumentCount; i++, j++) {
 			fxEcho(the, "<instrument name=\"");
-			fxEchoString(the, (txString) xsInstrumentNames[i]);
+			//fxEchoString(the, (txString) xsInstrumentNames[i]);
 			fxEcho(the, "\" value=\"");
-			fxEchoString(the, (txString) xsInstrumentUnits[i]);
+			//fxEchoString(the, (txString) xsInstrumentUnits[i]);
 			fxEcho(the, "\"/>");
 		}
 		fxEcho(the, "</instruments>");
