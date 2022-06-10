@@ -2,17 +2,17 @@
  * Copyright (c) 2016-2022  Moddable Tech, Inc.
  *
  *   This file is part of the Moddable SDK Runtime.
- * 
+ *
  *   The Moddable SDK Runtime is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Lesser General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
- * 
+ *
  *   The Moddable SDK Runtime is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU Lesser General Public License for more details.
- * 
+ *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Moddable SDK Runtime.  If not, see <http://www.gnu.org/licenses/>.
  *
@@ -49,7 +49,11 @@
 	#define ICACHE_RODATA_ATTR __attribute__((section(".rodata")))
 	#define ICACHE_XS6RO_ATTR __attribute__((section(".rodata.xs6ro"))) __attribute__((aligned(4)))
 	#define ICACHE_XS6RO2_ATTR __attribute__((section(".rodata.xs6ro2"))) __attribute__((aligned(4)))
-	#define ICACHE_XS6STRING_ATTR __attribute((section(".rodata.str1.4"))) __attribute__((aligned(4)))
+	#if ESP32 == 4
+		#define ICACHE_XS6STRING_ATTR __attribute((section(".rodata"))) __attribute__((aligned(4)))
+	#else
+		#define ICACHE_XS6STRING_ATTR __attribute((section(".rodata.str1.4"))) __attribute__((aligned(4)))
+	#endif
 #else
 	#define ICACHE_RODATA_ATTR  __attribute__((section(".irom.text")))
 	#define ICACHE_XS6RO_ATTR __attribute__((section(".irom1.text"))) __attribute__((aligned(4)))
@@ -331,7 +335,7 @@ void selectionSort(void *base, size_t num, size_t width, int (*compare )(const v
 #define c_strtod strtod
 #define c_strtol strtol
 #define c_strtoul strtoul
-	
+
 /* DATE */
 
 #if ESP32
@@ -355,10 +359,10 @@ void selectionSort(void *base, size_t num, size_t width, int (*compare )(const v
 #endif
 
 /* ERROR */
-	
+
 #define C_ENOMEM ENOMEM
 #define C_EINVAL EINVAL
-	
+
 /* MATH */
 
 #include <math.h>
@@ -528,7 +532,7 @@ uint8_t modSPIErase(uint32_t offset, uint32_t size);
 	#define kCPUESP32S2 1
 	#define kTargetCPUCount 1
 	#define kESP32TimerDef	int_clr
-#elif ESP32 == 1 
+#elif ESP32 == 1
 	#define kTargetCPUCount 2
 	#define kESP32TimerDef	int_clr_timers
 #else

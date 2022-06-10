@@ -2261,7 +2261,7 @@ static char* const xsInstrumentNames[xsInstrumentCount] ICACHE_XS6STRING_ATTR = 
 	"Keys used",
 	"Modules loaded",
 	"Parser used",
-	"Floating Point"
+	"Floating Point",
 };
 static char* const xsInstrumentUnits[xsInstrumentCount] ICACHE_XS6STRING_ATTR = {
 	" / ",
@@ -2274,7 +2274,7 @@ static char* const xsInstrumentUnits[xsInstrumentCount] ICACHE_XS6STRING_ATTR = 
 	" keys",
 	" modules",
 	" bytes",
-	" operations"
+	" operations",
 };
 
 
@@ -2282,7 +2282,6 @@ void fxDescribeInstrumentation(txMachine* the, txInteger count, txString* names,
 {
 	txInteger i, j = 0;
 #ifdef mxDebug
-	char buffer[256];
 	if (fxIsConnected(the)) {
 		fxEchoStart(the);
 		fxEcho(the, "<instruments>");
@@ -2295,11 +2294,9 @@ void fxDescribeInstrumentation(txMachine* the, txInteger count, txString* names,
 		}
 		for (i = 0; i < xsInstrumentCount; i++, j++) {
 			fxEcho(the, "<instrument name=\"");
-			c_strcpy(buffer,  xsInstrumentNames[i]);
-			fxEchoString(the, buffer);
+			fxEchoString(the, (txString) xsInstrumentNames[i]);
 			fxEcho(the, "\" value=\"");
-			c_strcpy(buffer,  xsInstrumentUnits[i]);
-			fxEchoString(the, buffer);
+			fxEchoString(the, (txString) xsInstrumentUnits[i]);
 			fxEcho(the, "\"/>");
 		}
 		fxEcho(the, "</instruments>");
