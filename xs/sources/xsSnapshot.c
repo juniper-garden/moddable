@@ -50,8 +50,7 @@ static txSlot* fxUnprojectSlot(txMachine* the, txSnapshot* snapshot, txSlot* slo
 static void fxUnprojectTable(txMachine* the, txSnapshot* snapshot, txSlot* table);
 
 static void fxWriteChunk(txMachine* the, txSnapshot* snapshot, txSlot* slot);
-static void fxWriteChunkArray(txMachine* the, txSnapshot* snapshot, txSlot* address, txSize length, txFlag flag);
-static void fxWriteChunkBigInt(txMachine* the, txSnapshot* snapshot, void* address, txSize size);
+static void fxWriteChunkArray(txMachine* the, txSnapshot* snapshot, txSlot* address, txSize length);
 static void fxWriteChunkData(txMachine* the, txSnapshot* snapshot, void* address);
 static void fxWriteChunkTable(txMachine* the, txSnapshot* snapshot, txSlot** address, txSize length);
 static void fxWriteChunkZero(txMachine* the, txSnapshot* snapshot, txSize size);
@@ -65,7 +64,7 @@ static void fxWriteStack(txMachine* the, txSnapshot* snapshot);
 #define mxThrowIf(_ERROR) { if (_ERROR) { snapshot->error = _ERROR; fxJump(the); } }
 #define mxChunkFlag 0x80000000
 
-#define mxCallbacksLength 495
+#define mxCallbacksLength 494
 static txCallback gxCallbacks[mxCallbacksLength] = {
 	fx_AggregateError,
 	fx_Array_from,
@@ -338,7 +337,6 @@ static txCallback gxCallbacks[mxCallbacksLength] = {
 	fx_Object_getOwnPropertyNames,
 	fx_Object_getOwnPropertySymbols,
 	fx_Object_getPrototypeOf,
-	fx_Object_hasOwn,
 	fx_Object_is,
 	fx_Object_isExtensible,
 	fx_Object_isFrozen,
