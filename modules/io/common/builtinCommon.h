@@ -31,8 +31,8 @@ xsSlot *builtinGetCallback(xsMachine *the, xsIdentifier id);
 	#define kPinBanks (2)
 
 	extern portMUX_TYPE gCommonCriticalMux;
-	#define builtinCriticalSectionBegin() vPortEnterCritical(&gCommonCriticalMux)
-	#define builtinCriticalSectionEnd() vPortExitCritical(&gCommonCriticalMux)
+	#define builtinCriticalSectionBegin() portENTERCritical(&gCommonCriticalMux)
+	#define builtinCriticalSectionEnd() portEXITCritical(&gCommonCriticalMux)
 
 #elif defined(__ets__)
 	#include "Arduino.h"	// mostly to get xs_rsil
