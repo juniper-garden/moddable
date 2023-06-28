@@ -438,8 +438,7 @@ export class Advertisement {
 			let part = parts[i];
 			length += part.data.length;
 		}
-		if (length > GAP.MAX_AD_LENGTH)
-			throw new Error("advertisement exceeds maximum length");
+
 		let advertisement = new Uint8Array(length);
 		for (let i = 0, j = 0; i < parts.length; ++i) {
 			let part = parts[i];
